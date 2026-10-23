@@ -8,7 +8,7 @@ Aplicación web para la gestión de una empresa de cerámica. Proyecto Final del
 | --- | --- | --- |
 | [Integrante 1] | [@Reverse07](https://github.com/Reverse07) | `ci-integrante-1.yml` – pruebas |
 | [Integrante 2] | [@usuario] | `calidad-integrante-2.yml` – lint y auditoría |
-| [Integrante 3] | [@usuario] | `docker-integrante-3.yml` – imagen y Compose |
+| Alexander Ribau | [@RibauAlexander](https://github.com/RibauAlexander) | `docker-integrante-3.yml` – imagen y Compose |
 
 ## Ejecutar con Docker
 
