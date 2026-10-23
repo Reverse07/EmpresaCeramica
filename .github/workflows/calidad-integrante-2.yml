@@ -1,0 +1,47 @@
+# GitHub Action del Integrante 2 — Calidad de código y seguridad de dependencias
+# Revisa el estilo con ESLint y busca vulnerabilidades conocidas en las dependencias.
+name: Calidad - Lint y auditoría (Integrante 2)
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Revisar estilo de código
+        run: npm run lint
+
+  auditoria:
+    name: Auditoría de dependencias
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Buscar vulnerabilidades altas o críticas en producción
+        run: npm audit --omit=dev --audit-level=high

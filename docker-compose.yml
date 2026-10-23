@@ -1,0 +1,36 @@
+name: empresa-ceramica
+
+services:
+  app:
+    build: .
+    image: empresa-ceramica:latest
+    container_name: ceramica-app
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      PORT: 3000
+      # La aplicación aún no consulta la base de datos; la variable queda lista para el Avance 3.
+      DATABASE_URL: postgres://${POSTGRES_USER:-ceramica}:${POSTGRES_PASSWORD:-ceramica_dev}@db:5432/${POSTGRES_DB:-ceramica}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: ceramica-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ceramica}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ceramica_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-ceramica}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  db_data:

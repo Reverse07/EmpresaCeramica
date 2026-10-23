@@ -1,0 +1,23 @@
+{
+  "name": "empresa-ceramica",
+  "version": "0.2.0",
+  "description": "Aplicación web para la gestión de una empresa de cerámica (Proyecto Final - Herramientas de Desarrollo, UTP)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test",
+    "lint": "eslint ."
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0"
+  }
+}
