@@ -8,7 +8,7 @@ Aplicación web para la gestión de una empresa de cerámica. Proyecto Final del
 | --- | --- | --- |
 | [Integrante 1] | [@Reverse07](https://github.com/Reverse07) | `ci-integrante-1.yml` – pruebas |
 | [Integrante 2] | [@usuario] | `calidad-integrante-2.yml` – lint y auditoría |
-| [Integrante 3] | [@usuario] | `docker-integrante-3.yml` – imagen y Compose |
+| Alexander Ribau | [@RibauAlexander](https://github.com/RibauAlexander) | `docker-integrante-3.yml` – imagen y Compose |
 
 ## Ejecutar con Docker
 
@@ -19,7 +19,7 @@ curl http://localhost:3000/api/productos
 docker compose down
 ```
 
-Para cambiar el puerto o las credenciales de la base, copia `.env.example` a `.env`.
+Para cambiar el puerto o las credenciales de la base, copia `.env.example` a `.env`. Para una explicación detallada de arquitectura, scripts de npm y comandos, consulta la [Guía de Despliegue con Docker](docs/despliegue-docker.md).
 
 ## Ejecutar sin Docker
 
@@ -36,6 +36,8 @@ npm run lint     # revisión de estilo
 
 ```
 .github/workflows/   3 GitHub Actions (uno por integrante)
+docs/                documentación del proyecto y guía de despliegue
+docker/init-db/      script SQL de inicialización de la base de datos
 src/                 código de la aplicación
 test/                pruebas automáticas
 Dockerfile           imagen de la aplicación

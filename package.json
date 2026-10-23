@@ -6,7 +6,12 @@
   "scripts": {
     "start": "node src/server.js",
     "test": "node --test",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "docker:build": "docker compose build",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f app",
+    "docker:check": "docker compose config --quiet"
   },
   "engines": {
     "node": ">=20"
