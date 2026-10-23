@@ -1,7 +1,7 @@
 {
   "name": "empresa-ceramica",
   "version": "0.2.0",
-  "description": "Aplicación web para la gestión de una empresa de cerámica (Proyecto Final - Herramientas de Desarrollo, UTP)",
+  "description": "Ludier - Aplicación web para la gestión de cerámica artesanal contemporánea (Lima, Perú)",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

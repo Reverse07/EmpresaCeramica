@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ludier — Panel de Administración de Taller</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2324201c'/><path d='M30,35 Q28,80 50,80 Q72,80 70,35 Z' fill='%23c46d4e'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- Encabezado de Administración -->
+  <header class="admin-header" role="banner">
+    <div class="admin-header-container">
+      <div class="admin-brand">
+        <a href="/" style="font-family: var(--font-serif); font-size: 1.8rem; font-weight: 700; letter-spacing: 0.1em; color: var(--c-white);">
+          LUDIER
+        </a>
+        <span class="admin-badge">Panel Administrativo</span>
+      </div>
+
+      <div class="admin-header-actions">
+        <a href="/" class="btn btn-secondary btn-sm" style="color: var(--c-white); border-color: #574f46;">
+          ← Volver a la Tienda
+        </a>
+        <div class="admin-session-info">
+          <span class="token-indicator active" aria-hidden="true"></span>
+          <span id="session-token-display">Sin autenticar</span>
+        </div>
+        <button id="admin-logout-btn" class="btn btn-secondary btn-sm" style="color: #fca5a5; border-color: #7f1d1d;">
+          Cerrar Sesión
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Área Principal de Contenido -->
+  <main class="admin-main" role="main">
+
+    <!-- Vista 1: Formulario de Autenticación por Token -->
+    <section id="admin-auth-view" class="admin-auth-card" aria-labelledby="auth-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
+      <h2 id="auth-title">Acceso al Panel</h2>
+      <p>Introduce tu token de administración para gestionar productos y pedidos del taller.</p>
+
+      <div class="form-group" style="text-align: left;">
+        <label for="admin-token-input">Token de Administrador (ADMIN_TOKEN):</label>
+        <input type="password" id="admin-token-input" placeholder="Ingresa el token secreto..." autocomplete="current-password">
+      </div>
+
+      <button id="admin-login-btn" class="btn btn-primary" style="width: 100%; margin-top: 0.75rem;">
+        Ingresar al Panel
+      </button>
+
+      <div class="admin-auth-note">
+        <strong>Nota de desarrollo:</strong> El token se configura en la variable de entorno <code>ADMIN_TOKEN</code>. Valor por defecto para desarrollo: <code>ludier-dev-token-2026</code>.
+      </div>
+    </section>
+
+    <!-- Vista 2: Dashboard Administrativo -->
+    <div id="admin-app-view" style="display: none;">
+
+      <!-- Pestañas de navegación -->
+      <nav class="admin-tabs" role="tablist" aria-label="Secciones administrativas">
+        <button class="admin-tab-btn active" data-tab="productos" role="tab" aria-selected="true">
+          <span>Gestión de Productos</span>
+          <span class="tab-badge" id="products-badge-count">0</span>
+        </button>
+        <button class="admin-tab-btn" data-tab="pedidos" role="tab" aria-selected="false">
+          <span>Pedidos de Clientes</span>
+          <span class="tab-badge" id="orders-badge-count">0</span>
+        </button>
+      </nav>
+
+      <!-- Pestaña 1: Catálogo de Productos -->
+      <section id="tab-productos-view" role="tabpanel" aria-labelledby="tab-prod-heading">
+        <div class="section-toolbar">
+          <div>
+            <h3 id="tab-prod-heading">Catálogo de Productos</h3>
+            <p style="color: var(--c-muted); font-size: 0.9rem;">
+              Crea, edita o elimina piezas del catálogo disponible en la tienda.
+            </p>
+          </div>
+          <button id="btn-nuevo-producto" class="btn btn-primary">
+            + Nueva Pieza
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Pieza</th>
+                <th>ID</th>
+                <th>Nombre y Detalle</th>
+                <th>Categoría</th>
+                <th>Precio (S/)</th>
+                <th>Dimensiones / Acabado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="products-table-body">
+              <!-- Filas renderizadas por admin.js -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Pestaña 2: Pedidos de Clientes -->
+      <section id="tab-pedidos-view" role="tabpanel" aria-labelledby="tab-ped-heading" style="display: none;">
+        <!-- Métricas rápidas -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card-title">Total Pedidos</div>
+            <div id="stat-total-orders" class="stat-card-value">0</div>
+          </div>
+          <div class="stat-card stat-pending">
+            <div class="stat-card-title">Pendientes</div>
+            <div id="stat-pending-orders" class="stat-card-value">0</div>
+          </div>
+          <div class="stat-card stat-prep">
+            <div class="stat-card-title">En Preparación</div>
+            <div id="stat-prep-orders" class="stat-card-value">0</div>
+          </div>
+          <div class="stat-card stat-done">
+            <div class="stat-card-title">Entregados</div>
+            <div id="stat-done-orders" class="stat-card-value">0</div>
+          </div>
+        </div>
+
+        <div class="section-toolbar">
+          <div>
+            <h3 id="tab-ped-heading">Pedidos Recibidos</h3>
+            <p style="color: var(--c-muted); font-size: 0.9rem;">
+              Actualiza el estado de los pedidos recibidos desde la tienda pública.
+            </p>
+          </div>
+
+          <!-- Filtros de estado -->
+          <div class="filter-categories" style="gap: 0.4rem;">
+            <button class="filter-btn order-filter-btn active" data-status="todos">Todos</button>
+            <button class="filter-btn order-filter-btn" data-status="pendiente">Pendientes</button>
+            <button class="filter-btn order-filter-btn" data-status="en preparación">En preparación</button>
+            <button class="filter-btn order-filter-btn" data-status="entregado">Entregados</button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Código / Fecha</th>
+                <th>Cliente y Destino</th>
+                <th>Ítems Solicitados</th>
+                <th>Total (S/)</th>
+                <th>Estado</th>
+                <th>Cambiar Estado</th>
+              </tr>
+            </thead>
+            <tbody id="orders-table-body">
+              <!-- Filas de pedidos renderizadas por admin.js -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Modal Crear / Editar Producto Cerámico -->
+  <div id="admin-product-modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Formulario de producto">
+    <div class="modal-card" style="max-width: 620px; padding: 2.25rem 2rem;">
+      <button class="modal-close-btn" id="admin-product-modal-close" aria-label="Cerrar modal">&times;</button>
+
+      <h3 id="admin-product-modal-title" style="font-size: 1.8rem; margin-bottom: 1.25rem;">
+        Crear Producto Cerámico
+      </h3>
+
+      <form id="admin-product-form">
+        <input type="hidden" id="form-product-id">
+
+        <div class="form-group">
+          <label for="form-nombre">Nombre de la pieza <span class="required">*</span></label>
+          <input type="text" id="form-nombre" required placeholder="Ej. Taza Rústica Andina">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label for="form-categoria">Categoría <span class="required">*</span></label>
+            <select id="form-categoria" required>
+              <option value="vajilla">Vajilla</option>
+              <option value="decoración">Decoración</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="form-precio">Precio en Soles (S/) <span class="required">*</span></label>
+            <input type="number" id="form-precio" step="0.10" min="0.10" required placeholder="Ej. 28.50">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label for="form-tipo-svg">Tipo de Forma Cerámica</label>
+            <select id="form-tipo-svg">
+              <option value="taza">Taza / Pocillo</option>
+              <option value="plato">Plato / Fuente</option>
+              <option value="macetero">Macetero</option>
+              <option value="jarron">Jarrón Escultórico</option>
+              <option value="cuenco">Cuenco / Bowl</option>
+              <option value="tetera">Tetera</option>
+              <option value="jarra">Jarra de mesa</option>
+              <option value="florero">Florero minimalista</option>
+              <option value="sahumador">Sahumador ritual</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="form-color-hex">Color de Esmalte</label>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <input type="color" id="form-color-esmalte" value="#c4704f" style="width: 44px; height: 38px; padding: 0; border: 1px solid var(--c-border); cursor: pointer; border-radius: 4px;">
+              <input type="text" id="form-color-hex" value="#c4704f" style="flex: 1;" placeholder="#c4704f">
+            </div>
+          </div>
+        </div>
+
+        <!-- Paleta de esmaltes rápidos del taller -->
+        <div style="margin-bottom: 1.25rem;">
+          <label style="font-size: 0.8rem; color: var(--c-muted); display: block; margin-bottom: 0.35rem;">
+            Esmaltes minerales tradicionales de Ludier:
+          </label>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button type="button" class="color-preset" data-color="#c4704f" style="background:#c4704f; width:26px; height:26px; border-radius:50%; border:1px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,0.2);" title="Terracota clásica"></button>
+            <button type="button" class="color-preset" data-color="#5b6b4b" style="background:#5b6b4b; width:26px; height:26px; border-radius:50%; border:1px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,0.2);" title="Verde oliva reactivo"></button>
+            <button type="button" class="color-preset" data-color="#334e68" style="background:#334e68; width:26px; height:26px; border-radius:50%; border:1px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,0.2);" title="Azul cobalto profundo"></button>
+            <button type="button" class="color-preset" data-color="#e8e2d5" style="background:#e8e2d5; width:26px; height:26px; border-radius:50%; border:1px solid #ccc; box-shadow:0 1px 3px rgba(0,0,0,0.2);" title="Crema salpicado de hierro"></button>
+            <button type="button" class="color-preset" data-color="#3b3835" style="background:#3b3835; width:26px; height:26px; border-radius:50%; border:1px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,0.2);" title="Negro humo satinado"></button>
+            <button type="button" class="color-preset" data-color="#c98a3b" style="background:#c98a3b; width:26px; height:26px; border-radius:50%; border:1px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,0.2);" title="Ocre mostaza"></button>
+            <button type="button" class="color-preset" data-color="#7a8d79" style="background:#7a8d79; width:26px; height:26px; border-radius:50%; border:1px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,0.2);" title="Salvia suave"></button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label for="form-dimensiones">Dimensiones</label>
+            <input type="text" id="form-dimensiones" placeholder="Ej. Diámetro 14 cm x Alto 12 cm">
+          </div>
+
+          <div class="form-group">
+            <label for="form-acabado">Acabado / Textura</label>
+            <input type="text" id="form-acabado" placeholder="Ej. Gres mate y esmalte satinado">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="form-descripcion">Descripción detallada</label>
+          <textarea id="form-descripcion" rows="3" placeholder="Detalles de elaboración, inspiración o recomendaciones de uso..."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="document.getElementById('admin-product-modal-close').click();">
+            Cancelar
+          </button>
+          <button type="submit" id="admin-form-submit-btn" class="btn btn-primary">
+            Guardar Producto
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Contenedor de notificaciones flotantes -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script src="js/svg-catalog.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

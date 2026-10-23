@@ -9,6 +9,7 @@ services:
       - "${APP_PORT:-3000}:3000"
     environment:
       PORT: 3000
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-ludier-dev-token-2026}
       # La aplicación aún no consulta la base de datos; la variable queda lista para el Avance 3.
       DATABASE_URL: postgres://${POSTGRES_USER:-ceramica}:${POSTGRES_PASSWORD:-ceramica_dev}@db:5432/${POSTGRES_DB:-ceramica}
     depends_on:

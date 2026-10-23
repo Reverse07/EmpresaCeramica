@@ -18,4 +18,17 @@ module.exports = [
       eqeqeq: 'error',
     },
   },
+  {
+    files: ['src/public/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'script',
+      globals: { ...globals.browser },
+    },
+    rules: {
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      eqeqeq: 'error',
+    },
+  },
 ];
+
