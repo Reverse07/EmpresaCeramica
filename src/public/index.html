@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ludier — Cerámica Artesanal Peruana | Taller en Lima</title>
+  <meta name="description" content="Ludier es un taller peruano de cerámica artesanal contemporánea. Piezas utilitarias y decorativas hechas a mano en gres y terracota. Envíos a todo el Perú.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M30,35 Q28,80 50,80 Q72,80 70,35 Z' fill='%23c46d4e'/><ellipse cx='50' cy='35' rx='20' ry='6' fill='%23f4ede2'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Encabezado y Navegación principal -->
+  <header class="site-header" role="banner">
+    <div class="header-container">
+      <a href="/" class="brand" aria-label="Ludier Cerámica - Inicio">
+        <span class="brand-title">LUDIER</span>
+        <span class="brand-tagline">TALLER DE CERÁMICA • LIMA, PERÚ</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Navegación principal">
+        <a href="#catalogo">Colección</a>
+        <a href="#taller">El Taller</a>
+        <a href="#contacto">Contacto</a>
+        <a href="/admin" style="color: var(--c-clay); font-weight: 600;">Panel Admin</a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="cart-toggle-btn" class="cart-toggle-btn" aria-label="Abrir carrito de compras">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span style="font-size: 0.9rem;">Carrito</span>
+          <span id="cart-counter" class="cart-counter" aria-live="polite">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main id="contenido-principal" role="main">
+
+    <!-- Portada con Identidad de Marca Ludier -->
+    <section class="hero-section" aria-labelledby="hero-title">
+      <div class="hero-container">
+        <div class="hero-content">
+          <span class="hero-pill">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+            Taller Artesanal en Barranco
+          </span>
+          <h1 id="hero-title" class="hero-title">
+            Cerámica contemporánea nacida del <em>barro y el fuego</em>
+          </h1>
+          <p class="hero-description">
+            Diseñamos y horneamos piezas utilitarias y decorativas únicas. Cada pieza es modelada a torno o a mano en pastas de gres y terracotas peruanas de alta temperatura.
+          </p>
+          <div class="hero-actions">
+            <a href="#catalogo" class="btn btn-primary">Explorar Catálogo</a>
+            <a href="#taller" class="btn btn-secondary">Conocer el Taller</a>
+          </div>
+          <div class="hero-badges">
+            <div class="hero-badge-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              100% Hecho a mano
+            </div>
+            <div class="hero-badge-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Gres de alta temperatura (1240 °C)
+            </div>
+            <div class="hero-badge-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Esmaltes no tóxicos libres de plomo
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hero-card-art">
+            <span class="hero-card-tag">Pieza Icónica</span>
+            <svg class="ludier-svg" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="h-sombra" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#2a2521" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#2a2521" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="h-arcilla" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#9e5638"/>
+                  <stop offset="50%" stop-color="#b86644"/>
+                  <stop offset="100%" stop-color="#8a472c"/>
+                </linearGradient>
+              </defs>
+              <ellipse cx="120" cy="205" rx="72" ry="14" fill="url(#h-sombra)" />
+              <path d="M 148 95 C 190 95, 190 160, 148 160" fill="none" stroke="#c46d4e" stroke-width="14" stroke-linecap="round" />
+              <rect x="74" y="165" width="80" height="20" rx="6" fill="url(#h-arcilla)" />
+              <path d="M 68 85 L 75 172 Q 76 178 84 178 L 144 178 Q 152 178 153 172 L 160 85 Z" fill="#c46d4e" />
+              <path d="M 68 115 Q 85 130 102 115 T 136 120 T 160 110 L 160 85 L 68 85 Z" fill="#ffffff" fill-opacity="0.22" />
+              <ellipse cx="114" cy="85" rx="46" ry="10" fill="#c46d4e" stroke="#f0ebe1" stroke-width="2" />
+              <ellipse cx="114" cy="85" rx="40" ry="7" fill="#43281c" fill-opacity="0.85" />
+            </svg>
+            <h3 class="hero-card-caption">Taza Artesanal Ludier</h3>
+            <div class="hero-card-price">S/ 18.50</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Catálogo de Productos con Filtros y Buscador -->
+    <section id="catalogo" class="catalog-section" aria-labelledby="catalog-heading">
+      <div class="section-header">
+        <span class="section-subtitle">Taller de Cerámica</span>
+        <h2 id="catalog-heading" class="section-title">Colección de Piezas Únicas</h2>
+        <p style="color: var(--c-muted); max-width: 540px; margin: 0 auto;">
+          Explora vajilla para tus mañanas y objetos de autor para tus espacios. Precios en soles peruanos (S/).
+        </p>
+      </div>
+
+      <!-- Barra de herramientas: Filtros + Buscador -->
+      <div class="catalog-toolbar">
+        <div class="toolbar-top">
+          <!-- Buscador -->
+          <div class="search-box">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="search-input" placeholder="Buscar por pieza, acabado o uso..." aria-label="Buscar producto">
+            <button id="search-clear" class="search-clear" aria-label="Limpiar búsqueda">&times;</button>
+          </div>
+
+          <!-- Filtro por categorías -->
+          <div class="filter-categories" id="category-filters" role="tablist" aria-label="Filtro de categorías">
+            <button class="filter-btn active" data-category="todas" role="tab" aria-selected="true">Todas las piezas</button>
+            <button class="filter-btn" data-category="vajilla" role="tab" aria-selected="false">Vajilla</button>
+            <button class="filter-btn" data-category="decoración" role="tab" aria-selected="false">Decoración</button>
+          </div>
+        </div>
+
+        <div class="catalog-status-bar">
+          <span id="catalog-count">Cargando catálogo del taller...</span>
+          <span>Envíos a domicilio en Lima y Provincias</span>
+        </div>
+      </div>
+
+      <!-- Grilla interactiva de productos -->
+      <div id="products-grid" class="products-grid" aria-live="polite">
+        <!-- Renderizado dinámico desde store.js -->
+      </div>
+    </section>
+
+    <!-- Sección El Taller & Filosofía -->
+    <section id="taller" class="story-section" aria-labelledby="story-heading">
+      <div class="story-container">
+        <div class="story-content">
+          <span class="hero-pill" style="margin-bottom: 0.75rem;">Artesanía Peruana</span>
+          <h2 id="story-heading">La materia viva que habita tu hogar</h2>
+          <p>
+            En <strong>Ludier</strong> creemos en la belleza de lo imperfecto y lo pausado. En nuestro taller ubicado en Barranco, cada plato, taza o jarrón comienza como una porción de arcilla de canteras locales, para luego pasar por el torno, el secado natural y dos quemas al fuego.
+          </p>
+          <p>
+            Nuestros esmaltes minerales son formulados artesanalmente en el taller, inspirados en los tonos del desierto costero y los valles peruanos.
+          </p>
+          <div class="story-pillars">
+            <div class="pillar-card">
+              <h4>El Torno</h4>
+              <p>Curvas suaves modeladas con ritmo y tacto en torno de alfarero tradicional.</p>
+            </div>
+            <div class="pillar-card">
+              <h4>El Fuego</h4>
+              <p>Quema a 1240 °C para conferir máxima resistencia e impermeabilidad al gres.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="story-visual" aria-hidden="true" style="text-align: center;">
+          <div style="background-color: var(--c-white); border: 1px solid var(--c-border); border-radius: var(--radius-lg); padding: 3rem 2rem; box-shadow: var(--shadow-md);">
+            <svg class="ludier-svg" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" style="width: 200px; height: 200px; margin: 0 auto;">
+              <ellipse cx="120" cy="190" rx="55" ry="12" fill="#2a2521" fill-opacity="0.15" />
+              <path d="M 72 65 Q 60 170 120 170 Q 180 170 168 65 Z" fill="#556b43" />
+              <ellipse cx="120" cy="65" rx="48" ry="12" fill="#556b43" stroke="#e8e2d5" stroke-width="2" />
+              <ellipse cx="120" cy="65" rx="40" ry="8" fill="#231f1c" fill-opacity="0.4" />
+            </svg>
+            <div style="font-family: var(--font-serif); font-size: 1.5rem; margin-top: 1.5rem; color: var(--c-dark);">
+              «Objetos con memoria de manos artesanas»
+            </div>
+            <div style="font-size: 0.85rem; color: var(--c-muted); margin-top: 0.5rem;">
+              Taller Ludier • Lima, Perú
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal Detalle de Producto -->
+  <div id="product-modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Detalle del producto">
+    <div id="product-modal-card" class="modal-card">
+      <button class="modal-close-btn" id="product-modal-close" aria-label="Cerrar modal">&times;</button>
+      <!-- Contenido inyectado por store.js -->
+    </div>
+  </div>
+
+  <!-- Cajón del Carrito (Slide-over Drawer) -->
+  <div id="cart-drawer-overlay" class="cart-drawer-overlay" aria-hidden="true"></div>
+  <aside id="cart-drawer" class="cart-drawer" role="dialog" aria-modal="true" aria-label="Carrito de compras">
+    <div class="cart-header">
+      <h2>Tu Carrito</h2>
+      <button id="cart-close-btn" class="modal-close-btn" style="position: static;" aria-label="Cerrar carrito">&times;</button>
+    </div>
+
+    <div id="cart-items-list" class="cart-items-list" aria-live="polite">
+      <!-- Elementos del carrito renderizados dinámicamente -->
+    </div>
+
+    <div class="cart-footer">
+      <div class="cart-summary-line">
+        <span>Subtotal</span>
+        <span id="cart-subtotal" style="font-weight: 600;">S/ 0.00</span>
+      </div>
+      <div class="cart-summary-line" style="font-size: 0.85rem; color: var(--c-muted);">
+        <span>Coordinación de despacho</span>
+        <span>A convenir</span>
+      </div>
+      <div class="cart-summary-line cart-summary-total">
+        <span>Total</span>
+        <span id="cart-total" style="color: var(--c-clay-dark);">S/ 0.00</span>
+      </div>
+      <button id="cart-checkout-btn" class="btn btn-primary" style="width: 100%;">
+        Completar Pedido
+      </button>
+    </div>
+  </aside>
+
+  <!-- Modal de Checkout / Formulario de Envío de Pedido -->
+  <div id="checkout-modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Finalizar compra y envío de pedido">
+    <div class="modal-card checkout-modal-card">
+      <button class="modal-close-btn" id="checkout-modal-close" aria-label="Cerrar formulario de compra">&times;</button>
+
+      <!-- Vista 1: Formulario de datos -->
+      <div id="checkout-form-view">
+        <div class="checkout-header">
+          <h2>Finalizar Pedido</h2>
+          <p>Ingresa tus datos de contacto para preparar tu paquete artesanal y coordinar el envío.</p>
+        </div>
+
+        <div id="checkout-mini-summary" class="order-mini-summary">
+          <!-- Resumen de ítems -->
+        </div>
+
+        <form id="checkout-form" novalidate>
+          <div class="form-group">
+            <label for="checkout-nombre">Nombre y Apellido <span class="required">*</span></label>
+            <input type="text" id="checkout-nombre" name="nombre" required placeholder="Ej. Camila Navarro Rivas" autocomplete="name">
+          </div>
+
+          <div class="form-group">
+            <label for="checkout-telefono">Teléfono / WhatsApp <span class="required">*</span></label>
+            <input type="tel" id="checkout-telefono" name="telefono" required placeholder="Ej. 987 654 321" autocomplete="tel">
+          </div>
+
+          <div class="form-group">
+            <label for="checkout-direccion">Dirección de Entrega <span class="required">*</span></label>
+            <input type="text" id="checkout-direccion" name="direccion" required placeholder="Ej. Jr. Centenario 340, Dpto 401, Barranco, Lima" autocomplete="street-address">
+          </div>
+
+          <div class="form-group">
+            <label for="checkout-notas">Instrucciones o Referencias (Opcional)</label>
+            <textarea id="checkout-notas" name="notas" rows="2" placeholder="Ej. Dejar en recepción / Empacar para regalo..."></textarea>
+          </div>
+
+          <button type="submit" id="checkout-submit-btn" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+            Confirmar Pedido
+          </button>
+        </form>
+      </div>
+
+      <!-- Vista 2: Confirmación Exitosa -->
+      <div id="checkout-success-view" class="checkout-success-view" style="display: none;">
+        <div class="checkout-success-icon" aria-hidden="true">✓</div>
+        <h2>¡Gracias por tu pedido!</h2>
+        <p>Tu orden ha sido registrada correctamente en el taller de Ludier.</p>
+        <div id="order-code-badge" class="order-code-badge">PED-0000</div>
+        <div id="order-success-details" class="order-mini-summary" style="width: 100%; text-align: left; margin-top: 1rem;">
+          <!-- Detalles del pedido -->
+        </div>
+        <p style="font-size: 0.88rem; color: var(--c-muted); max-width: 440px;">
+          Nos comunicaremos a tu número de WhatsApp para confirmar el pago y coordinar el despacho seguro de tus cerámicas.
+        </p>
+        <button id="finish-order-btn" class="btn btn-primary" style="margin-top: 0.5rem;">
+          Volver a la Tienda
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pie de página -->
+  <footer id="contacto" class="site-footer" role="contentinfo">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <span class="brand-title" style="font-size: 1.8rem;">LUDIER</span>
+        <span class="brand-tagline" style="color: var(--c-clay-light);">CERÁMICA ARTESANAL</span>
+        <p>
+          Taller peruano de cerámica utilitaria y decorativa. Modelado en gres de alta temperatura con esmaltes minerales formulados a mano.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>El Taller</h4>
+        <ul>
+          <li>Jr. Batalla de Junín 210</li>
+          <li>Barranco, Lima — Perú</li>
+          <li>Mar a Sáb: 10:00 - 19:00</li>
+          <li>Dom: 11:00 - 17:00</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Atención & Envíos</h4>
+        <ul>
+          <li>WhatsApp: +51 987 654 321</li>
+          <li>hola@ludierceramica.pe</li>
+          <li>Envíos Lima Metropolitana</li>
+          <li>Envíos a todo el Perú</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Gestión</h4>
+        <ul>
+          <li><a href="/admin">Panel de Administración</a></li>
+          <li><a href="/health">Estado del Sistema (/health)</a></li>
+          <li><a href="/api/productos">Catálogo API JSON</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 Ludier Cerámica Artesanal. Todos los derechos reservados.</span>
+      <span>Precios expresados en Nuevos Soles (S/). Hecho con barro, fuego y pasión en Perú.</span>
+    </div>
+  </footer>
+
+  <!-- Contenedor de notificaciones flotantes -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script src="js/svg-catalog.js"></script>
+  <script src="js/store.js"></script>
+</body>
+</html>
