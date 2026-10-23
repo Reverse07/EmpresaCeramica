@@ -31,11 +31,20 @@ function crearApp() {
   });
 
   app.get('/api/productos/:id', (req, res) => {
-    const producto = productos.find((p) => p.id === Number(req.params.id));
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: 'El id debe ser un número entero positivo' });
+    }
+    const producto = productos.find((p) => p.id === id);
     if (!producto) {
       return res.status(404).json({ error: 'Producto no encontrado' });
     }
     return res.json(producto);
+  });
+
+  // Manejo de rutas no existentes
+  app.use((_req, res) => {
+    res.status(404).json({ error: 'Ruta no encontrada' });
   });
 
   return app;

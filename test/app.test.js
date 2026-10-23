@@ -24,6 +24,14 @@ test('GET /health responde ok', async () => {
   assert.deepEqual(await res.json(), { estado: 'ok' });
 });
 
+test('GET / devuelve servicio y versión', async () => {
+  const res = await fetch(`${base}/`);
+  assert.equal(res.status, 200);
+  const body = await res.json();
+  assert.equal(body.servicio, 'EmpresaCeramica');
+  assert.ok(body.version);
+});
+
 test('GET /api/productos devuelve el catálogo completo', async () => {
   const res = await fetch(`${base}/api/productos`);
   assert.equal(res.status, 200);
@@ -37,7 +45,25 @@ test('GET /api/productos?categoria=vajilla filtra por categoría', async () => {
   assert.ok(lista.every((p) => p.categoria === 'vajilla'));
 });
 
+test('GET /api/productos?categoria=decoración filtra decoración', async () => {
+  const res = await fetch(`${base}/api/productos?categoria=decoración`);
+  const lista = await res.json();
+  assert.ok(lista.length > 0);
+  assert.ok(lista.every((p) => p.categoria === 'decoración'));
+});
+
+test('GET /api/productos/:id devuelve el producto correcto', async () => {
+  const res = await fetch(`${base}/api/productos/1`);
+  assert.equal(res.status, 200);
+  const producto = await res.json();
+  assert.equal(producto.id, 1);
+  assert.ok(producto.nombre);
+  assert.ok(producto.precio);
+});
+
 test('GET /api/productos/:id devuelve 404 si no existe', async () => {
   const res = await fetch(`${base}/api/productos/999`);
   assert.equal(res.status, 404);
+  const body = await res.json();
+  assert.ok(body.error);
 });
