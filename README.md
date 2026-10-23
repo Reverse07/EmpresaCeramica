@@ -9,8 +9,8 @@ Aplicación web y plataforma de comercio para **Ludier**, taller peruano de cer�
 | Integrante | Usuario GitHub | GitHub Action a cargo |
 | --- | --- | --- |
 | [Integrante 1] | [@Reverse07](https://github.com/Reverse07) | `ci-integrante-1.yml` – pruebas |
-| [Integrante 2] | [@usuario] | `calidad-integrante-2.yml` – lint y auditoría |
-| [Integrante 3] | [@usuario] | `docker-integrante-3.yml` – imagen y Compose |
+| [Integrante 2] | [@JhonEscriba3](https://github.com/JhonEscriba3) | `calidad-integrante-2.yml` – lint y auditoría |
+| [Integrante 3] | [@RibauAlexander](https://github.com/RibauAlexander) | `docker-integrante-3.yml` – imagen y Compose |
 
 ---
 
