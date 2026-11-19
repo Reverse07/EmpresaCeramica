@@ -10,6 +10,7 @@
     categoriaActual: 'todas',
     filtroBusqueda: '',
     carrito: [],
+    pedidosHabilitados: false,
     productoSeleccionado: null,
   };
 
@@ -177,8 +178,8 @@
     }
 
     if (elements.cartCheckoutBtn) {
-      elements.cartCheckoutBtn.disabled = state.carrito.length === 0;
-      elements.cartCheckoutBtn.style.opacity = state.carrito.length === 0 ? '0.5' : '1';
+      elements.cartCheckoutBtn.disabled = !state.pedidosHabilitados || state.carrito.length === 0;
+      elements.cartCheckoutBtn.style.opacity = elements.cartCheckoutBtn.disabled ? '0.5' : '1';
     }
 
     if (!elements.cartItemsList) return;
@@ -446,6 +447,7 @@
 
   // Modal de Checkout / Formulario de Pedido
   function abrirCheckout() {
+    if (!state.pedidosHabilitados) return;
     if (state.carrito.length === 0) {
       mostrarToast('Tu carrito está vacío', 'error');
       return;
@@ -706,6 +708,25 @@
   cargarCarrito();
   cargarCatalogo();
   inicializarEventos();
+  fetch('/api/configuracion')
+    .then(function (res) {
+      if (!res.ok) throw new Error('Configuración no disponible');
+      return res.json();
+    })
+    .then(function ({ soloCatalogo }) {
+      state.pedidosHabilitados = soloCatalogo === false;
+      if (soloCatalogo) {
+        elements.cartCheckoutBtn.style.display = 'none';
+        document.getElementById('catalog-only-message').hidden = false;
+        document.querySelectorAll('a[href="/admin"]').forEach(function (enlace) {
+          enlace.hidden = true;
+        });
+      }
+      actualizarVistaCarrito();
+    })
+    .catch(function () {
+      document.getElementById('catalog-only-message').hidden = false;
+    });
 
   // Soporte para capturas o demostración visual
   if (window.location.search.includes('demo=detalle-carrito')) {

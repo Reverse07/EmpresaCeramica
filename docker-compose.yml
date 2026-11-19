@@ -6,11 +6,11 @@ services:
     image: empresa-ceramica:latest
     container_name: ceramica-app
     ports:
-      - "${APP_PORT:-3000}:3000"
+      - "127.0.0.1:${APP_PORT:-3000}:3000"
     environment:
       PORT: 3000
-      ADMIN_TOKEN: ${ADMIN_TOKEN:-ludier-dev-token-2026}
-      # La aplicación aún no consulta la base de datos; la variable queda lista para el Avance 3.
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-}
+      # Reservada para conectar la API a PostgreSQL en un avance posterior.
       DATABASE_URL: postgres://${POSTGRES_USER:-ceramica}:${POSTGRES_PASSWORD:-ceramica_dev}@db:5432/${POSTGRES_DB:-ceramica}
     depends_on:
       db:
@@ -26,6 +26,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-ceramica}
     volumes:
       - db_data:/var/lib/postgresql/data
+      - ./docker/init-db:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s

@@ -1,143 +1,42 @@
-# Ludier — Cerámica Artesanal
+# Ludier · EmpresaCeramica
 
-Aplicación web y plataforma de comercio para **Ludier**, taller peruano de cerámica artesanal contemporánea con sede en Barranco, Lima. Proyecto Final del curso **Herramientas de Desarrollo** (UTP, 2026 – Ciclo 2 Agosto).
+Tienda web para un taller de cerámica artesanal. Proyecto del curso **Herramientas de Desarrollo**, Universidad Tecnológica del Perú. El Avance 3 se presenta el **20 de noviembre de 2026 a las 10:00 a. m. (Lima)**.
 
----
-
-## Equipo
-
-| Integrante | Usuario GitHub | GitHub Action a cargo |
+| GitHub | Responsabilidad en CI | Workflow |
 | --- | --- | --- |
-| [Integrante 1] | [@Reverse07](https://github.com/Reverse07) | `ci-integrante-1.yml` – pruebas |
-| [Integrante 2] | [@JhonEscriba3](https://github.com/JhonEscriba3) | `calidad-integrante-2.yml` – lint y auditoría |
-| [Integrante 3] | [@RibauAlexander](https://github.com/RibauAlexander) | `docker-integrante-3.yml` – imagen y Compose |
+| [@Reverse07](https://github.com/Reverse07) | Pruebas HTTP y unitarias con Node 20 y 22 | `ci-integrante-1.yml` |
+| [@JhonEscriba3](https://github.com/JhonEscriba3) | ESLint y auditoría de dependencias | `calidad-integrante-2.yml` |
+| [@RibauAlexander](https://github.com/RibauAlexander) | Imagen, Compose y pruebas de humo | `docker-integrante-3.yml` |
 
----
+## Instalación y prueba en Windows
 
-## Rutas de la Interfaz
+Desde la raíz del repositorio, en PowerShell con Node.js 20 o 22:
 
-- **Tienda Pública (`/`)**:
-  - Portada con identidad de marca de taller artesanal.
-  - Catálogo interactivo de piezas en gres y terracota con buscador y filtro por categoría (`vajilla`, `decoración`).
-  - Ilustraciones vectoriales propias en SVG de cada pieza (tazas, platos, maceteros, jarrones, cuencos, teteras, etc.) con esmaltes artesanales distintivos. Precios en Soles peruanos (`S/`).
-  - Vista modal de detalle técnico de la pieza (dimensiones, acabado, cocción a 1240 °C).
-  - Carrito de compras con persistencia automática en `localStorage`.
-  - Formulario de checkout y despacho para envío de pedidos (nombre, teléfono/WhatsApp, dirección, notas) con confirmación inmediata y código de orden (`PED-XXXX`).
-
-- **Panel de Administración (`/admin`)**:
-  - Protegido mediante token de administrador (`ADMIN_TOKEN`).
-  - **Gestión de Productos**: Listado con vista previa, creación de nuevos productos (modal con selector de esmaltes y tipos de pieza), edición completa y eliminación.
-  - **Gestión de Pedidos**: Panel con métricas de órdenes, desglose de datos del cliente, productos solicitados, total y cambio de estado en tiempo real (`pendiente`, `en preparación`, `entregado`).
-
-- **Verificación de Salud (`/health`)**:
-  - Endpoint utilizado por el `HEALTHCHECK` del Dockerfile y los flujos de CI (`{"estado":"ok"}`).
-
----
-
-## Capturas de la Interfaz
-
-Las capturas generadas se encuentran almacenadas en el directorio `docs/capturas/`:
-
-1. **Tienda pública (`docs/capturas/tienda.png`)**: Portada, identidad de marca, buscador, filtros y grilla de piezas cerámicas.
-2. **Detalle y carrito (`docs/capturas/detalle-carrito.png`)**: Modal de especificaciones de la pieza y cajón lateral del carrito de compras.
-3. **Panel de administración (`docs/capturas/panel-admin.png`)**: Tablero de control administrativo con inventario de productos y pedidos recibidos.
-
----
-
-## Variables de Entorno
-
-Copia el archivo `.env.example` a `.env` para personalizar la configuración local:
-
-```bash
-cp .env.example .env
+```powershell
+npm.cmd ci
+npm.cmd test
+npm.cmd run lint
+npm.cmd audit --omit=dev --audit-level=high
+$env:ADMIN_TOKEN = [guid]::NewGuid().ToString('N')
+npm.cmd start
 ```
 
-| Variable | Descripción | Valor por defecto |
-| --- | --- | --- |
-| `PORT` / `APP_PORT` | Puerto en el que escucha la aplicación | `3000` |
-| `ADMIN_TOKEN` | Token de acceso para el panel y endpoints administrativos | `ludier-dev-token-2026` |
-| `POSTGRES_USER` | Usuario de base de datos PostgreSQL | `ceramica` |
-| `POSTGRES_PASSWORD` | Contraseña de base de datos | `cambia_esta_clave` |
-| `POSTGRES_DB` | Nombre de la base de datos | `ceramica` |
+Abre `http://localhost:3000/` para la tienda y `http://localhost:3000/admin` para el panel. Ingresa en el panel el `ADMIN_TOKEN` de la sesión. El carrito se guarda en el navegador. Express conserva el catálogo y los pedidos en memoria y los reinicios descartan los cambios. Compose incluye PostgreSQL con esquema y catálogo inicial independiente de la API.
 
----
+| Ruta | Uso |
+| --- | --- |
+| `GET /` | Tienda, catálogo, filtros y carrito |
+| `GET /health` | Estado HTTP de Express |
+| `GET /api/productos` y `GET /api/productos/:id` | Catálogo, filtro opcional `?categoria=vajilla` y ficha |
+| `POST /api/pedidos` | Registro de pedidos en la instalación local |
+| `GET /admin` | Interfaz de gestión local |
+| `POST /api/productos`, `PUT /api/productos/:id`, `DELETE /api/productos/:id`, `GET /api/pedidos` y `PATCH /api/pedidos/:id` | API de gestión con cabecera `x-admin-token` o `Authorization: Bearer …` |
 
-## Ejecutar sin Docker
+## Despliegue y entrega
 
-Requiere **Node.js 20** o superior.
+- [Guía de Docker, Compose, Kubernetes y Render](docs/despliegue-docker.md)
+- [Flujo Git y GitHub](CONTRIBUTING.md)
+- [Plan de calidad y GitHub Actions](docs/calidad.md)
+- [Informe de Avance del Proyecto Final 3](docs/informe-avance-3.md)
 
-```bash
-npm install
-npm start        # Inicia el servidor en http://localhost:3000
-npm test         # Ejecuta la suite de pruebas automatizadas con node:test
-npm run lint     # Validación de estilo de código con ESLint 9
-npm audit --omit=dev --audit-level=high  # Auditoría de seguridad
-```
-
-Una vez iniciado el servidor:
-- Accede a la tienda en: [http://localhost:3000/](http://localhost:3000/)
-- Accede al panel administrativo en: [http://localhost:3000/admin](http://localhost:3000/admin) (Token por defecto: `ludier-dev-token-2026`)
-
----
-
-## Ejecutar con Docker y Docker Compose
-
-```bash
-# Construir y levantar servicios
-docker compose up --build -d
-
-# Comprobar estado de salud
-curl http://localhost:3000/health
-
-# Probar la API de productos
-curl http://localhost:3000/api/productos
-
-# Detener los contenedores
-docker compose down
-```
-
----
-
-## Endpoints de la API REST
-
-### Públicos
-- `GET /health` – Estado del servicio (`{"estado":"ok"}`).
-- `GET /api/productos` – Catálogo completo (soporta filtro `?categoria=vajilla` o `?categoria=decoración`).
-- `GET /api/productos/:id` – Detalle de un producto específico (404 si no existe).
-- `POST /api/pedidos` – Registrar un pedido de compra (valida cliente y productos, responde 201).
-
-### Administrativos (Requieren cabecera `x-admin-token` o `Authorization: Bearer <token>`)
-- `POST /api/productos` – Crear un nuevo producto cerámico (201).
-- `PUT /api/productos/:id` – Actualizar datos de un producto (200).
-- `DELETE /api/productos/:id` – Eliminar un producto del catálogo (200).
-- `GET /api/pedidos` – Listar todos los pedidos recibidos (200).
-- `PATCH /api/pedidos/:id` – Actualizar estado del pedido (`pendiente`, `en preparación`, `entregado`) (200).
-
----
-
-## Estructura del Proyecto
-
-```
-.github/workflows/       # 3 GitHub Actions para pruebas, lint/auditoría y Docker
-docs/capturas/           # Capturas de pantalla de la interfaz de Ludier
-src/
-  ├── public/            # Archivos estáticos de la interfaz (HTML, CSS, JS)
-  │    ├── css/          # style.css y admin.css
-  │    ├── js/           # svg-catalog.js, store.js y admin.js
-  │    ├── index.html    # Tienda pública (ruta /)
-  │    └── admin.html    # Panel de administración (ruta /admin)
-  ├── app.js             # Lógica de Express, endpoints y catálogo en memoria
-  └── server.js          # Punto de entrada y arranque del servidor HTTP
-test/
-  └── app.test.js        # Pruebas automatizadas con node:test (25 pruebas)
-Dockerfile               # Construcción de imagen ligera multi-stage (Node 20 Alpine)
-docker-compose.yml       # Orquestación de la app y base de datos PostgreSQL
-CONTRIBUTING.md          # Guía de ramas, commits convencionales y Pull Requests
-README.md                # Documentación general del proyecto
-```
-
----
-
-## Licencia
-
-Distribuido bajo la licencia [MIT](LICENSE).
+Las [capturas históricas](docs/capturas/) corresponden a la interfaz incorporada desde `develop`. El informe contiene las evidencias verificadas y los pasos para adjuntar las del despliegue.

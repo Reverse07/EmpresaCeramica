@@ -2,7 +2,10 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { crearApp, productos, DEFAULT_ADMIN_TOKEN } = require('../src/app');
+const { crearApp, productos } = require('../src/app');
+const DEFAULT_ADMIN_TOKEN = 'token-exclusivo-de-pruebas';
+process.env.ADMIN_TOKEN = DEFAULT_ADMIN_TOKEN;
+delete process.env.PUBLIC_CATALOG_ONLY;
 
 let servidor;
 let base;
@@ -376,3 +379,42 @@ test('GET /admin sirve el panel de administración en HTML', async () => {
   assert.ok(contentType.includes('text/html'), 'Debe responder con text/html');
 });
 
+test('el catálogo público conserva la lectura y bloquea pedidos y administración', async () => {
+  process.env.PUBLIC_CATALOG_ONLY = 'true';
+  const app = crearApp();
+  delete process.env.PUBLIC_CATALOG_ONLY;
+
+  const demo = await new Promise((resolve) => {
+    const listener = app.listen(0, '127.0.0.1', () => resolve(listener));
+  });
+  const url = `http://127.0.0.1:${demo.address().port}`;
+  try {
+    assert.deepEqual(await (await fetch(`${url}/api/configuracion`)).json(), { soloCatalogo: true });
+    for (const ruta of ['/', '/health', '/api/productos']) {
+      assert.equal((await fetch(url + ruta)).status, 200);
+    }
+    for (const [metodo, ruta] of [
+      ['GET', '/admin'],
+      ['GET', '/admin.html'],
+      ['GET', '/%61dmin.html'],
+      ['GET', '/api/pedidos'],
+      ['POST', '/api/pedidos'],
+      ['POST', '/api/productos'],
+      ['DELETE', '/api/productos/1'],
+    ]) {
+      const res = await fetch(url + ruta, {
+        method: metodo,
+        headers: { 'x-admin-token': DEFAULT_ADMIN_TOKEN },
+      });
+      assert.equal(res.status, 404, `${metodo} ${ruta}`);
+    }
+  } finally {
+    demo.close();
+  }
+});
+
+test('GET /api/productos rechaza identificadores no enteros o no positivos', async () => {
+  for (const id of ['abc', '0', '-1', '1.5']) {
+    assert.equal((await fetch(`${base}/api/productos/${id}`)).status, 400);
+  }
+});

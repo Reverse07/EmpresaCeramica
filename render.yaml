@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: empresa-ceramica-ludier
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: PUBLIC_CATALOG_ONLY
+        value: "true"
