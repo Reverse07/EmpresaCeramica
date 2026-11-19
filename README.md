@@ -1,6 +1,8 @@
 # Ludier · EmpresaCeramica
 
-Tienda web para un taller de cerámica artesanal. Proyecto del curso **Herramientas de Desarrollo**, Universidad Tecnológica del Perú. El Avance 3 se presenta el **20 de noviembre de 2026 a las 10:00 a. m. (Lima)**.
+EmpresaCeramica es un proyecto académico del curso **Herramientas de Desarrollo** de la **Universidad Tecnológica del Perú**. Ludier es la tienda ficticia de cerámica artesanal creada para la demostración. El Avance 3 se presenta el **20 de noviembre de 2026 a las 10:00 a. m. (Lima)**.
+
+**Demostración pública en Render:** [Tienda Ludier](https://empresa-ceramica-ludier.onrender.com/) · [Estado del servicio](https://empresa-ceramica-ludier.onrender.com/health) · [Catálogo JSON](https://empresa-ceramica-ludier.onrender.com/api/productos). La versión pública incluye catálogo, filtros, detalle y carrito. Los pedidos y el panel administrativo se demuestran en la instalación local.
 
 | GitHub | Responsabilidad en CI | Workflow |
 | --- | --- | --- |
@@ -21,7 +23,9 @@ $env:ADMIN_TOKEN = [guid]::NewGuid().ToString('N')
 npm.cmd start
 ```
 
-Abre `http://localhost:3000/` para la tienda y `http://localhost:3000/admin` para el panel. Ingresa en el panel el `ADMIN_TOKEN` de la sesión. El carrito se guarda en el navegador. Express conserva el catálogo y los pedidos en memoria y los reinicios descartan los cambios. Compose incluye PostgreSQL con esquema y catálogo inicial independiente de la API.
+Abre `http://localhost:3000/` para la tienda y `http://localhost:3000/admin` para el panel. Ingresa en el panel el `ADMIN_TOKEN` de la sesión. El carrito se guarda en el navegador.
+
+PostgreSQL funciona en Docker Compose con un volumen persistente y un catálogo inicial de cuatro filas. Su integración con la API Express sigue pendiente. La API usa un catálogo de 12 productos en memoria y los cambios de productos y pedidos se descartan al reiniciar el proceso.
 
 | Ruta | Uso |
 | --- | --- |
