@@ -3,8 +3,6 @@
 const path = require('node:path');
 const express = require('express');
 
-const DEFAULT_ADMIN_TOKEN = 'ludier-dev-token-2026';
-
 // Catálogo artesanal de Ludier en memoria.
 const productos = [
   {
@@ -174,7 +172,7 @@ const pedidos = [
 ];
 
 function verificarAdmin(req, res, next) {
-  const tokenConfigurado = process.env.ADMIN_TOKEN || DEFAULT_ADMIN_TOKEN;
+  const tokenConfigurado = process.env.ADMIN_TOKEN;
   const authHeader = req.headers['authorization'];
   const customHeader = req.headers['x-admin-token'];
 
@@ -192,11 +190,30 @@ function verificarAdmin(req, res, next) {
 
 function crearApp() {
   const app = express();
+  const soloCatalogo = process.env.PUBLIC_CATALOG_ONLY === 'true';
   app.use(express.json());
 
-  // Servir archivos estáticos del frontend
+  app.get('/api/configuracion', (_req, res) => {
+    res.json({ soloCatalogo });
+  });
+
+  if (soloCatalogo) {
+    const noDisponible = (_req, res) => {
+      res.status(404).json({ error: 'Ruta no disponible en la demostración pública' });
+    };
+    app.use(['/admin', '/admin.html', '/api/pedidos'], noDisponible);
+    app.use('/api/productos', (req, res, next) => {
+      if (req.method === 'GET' || req.method === 'HEAD') return next();
+      return noDisponible(req, res);
+    });
+  }
+
   const publicDir = path.join(__dirname, 'public');
-  app.use(express.static(publicDir));
+  app.use('/css', express.static(path.join(publicDir, 'css')));
+  app.use('/js', express.static(path.join(publicDir, 'js')));
+  app.get(['/', '/index.html'], (_req, res) => {
+    res.sendFile(path.join(publicDir, 'index.html'));
+  });
 
   // Healthcheck: Usado por Dockerfile y GitHub Actions
   app.get('/health', (_req, res) => {
@@ -204,7 +221,7 @@ function crearApp() {
   });
 
   // Ruta hacia el panel de administración
-  app.get('/admin', (_req, res) => {
+  app.get(['/admin', '/admin.html'], (_req, res) => {
     res.sendFile(path.join(publicDir, 'admin.html'));
   });
 
@@ -220,6 +237,9 @@ function crearApp() {
   // Obtener producto por ID
   app.get('/api/productos/:id', (req, res) => {
     const id = Number(req.params.id);
+    if (!Number.isSafeInteger(id) || id <= 0) {
+      return res.status(400).json({ error: 'El id debe ser un número entero positivo' });
+    }
     const producto = productos.find((p) => p.id === id);
     if (!producto) {
       return res.status(404).json({ error: 'Producto no encontrado' });
@@ -414,7 +434,11 @@ function crearApp() {
     });
   });
 
+  app.use((_req, res) => {
+    res.status(404).json({ error: 'Ruta no encontrada' });
+  });
+
   return app;
 }
 
-module.exports = { crearApp, productos, pedidos, DEFAULT_ADMIN_TOKEN };
+module.exports = { crearApp, productos, pedidos };

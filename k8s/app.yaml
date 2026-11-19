@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: empresa-ceramica
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: empresa-ceramica
+  template:
+    metadata:
+      labels:
+        app: empresa-ceramica
+    spec:
+      containers:
+        - name: app
+          image: empresa-ceramica:avance3
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            - name: ADMIN_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: empresa-ceramica-admin
+                  key: ADMIN_TOKEN
+                  optional: true
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: empresa-ceramica
+spec:
+  type: ClusterIP
+  selector:
+    app: empresa-ceramica
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

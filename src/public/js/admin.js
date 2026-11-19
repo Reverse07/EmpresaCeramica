@@ -586,9 +586,5 @@
 
   if (tokenGuardado) {
     verificarYConectar(tokenGuardado);
-  } else if (window.location.search.includes('demo=admin')) {
-    setTimeout(function () {
-      verificarYConectar('ludier-dev-token-2026');
-    }, 400);
   }
 })();

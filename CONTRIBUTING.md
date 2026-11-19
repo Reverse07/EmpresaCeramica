@@ -48,19 +48,20 @@ Formato: `tipo: descripción corta en minúscula`
 | `chore` | Mantenimiento, dependencias, configuración |
 | `ci` | Workflows y Docker |
 
-## Releases
+## Entrega del Avance 3
 
-```bash
-git checkout develop && git pull
-git checkout -b release/v0.2.0
-# pruebas finales y ajustes menores
-git checkout main && git merge --no-ff release/v0.2.0
-git tag -a v0.2.0 -m "Avance 2"
-git push origin main --tags
-git checkout develop && git merge --no-ff release/v0.2.0 && git push origin develop
+Cuando el equipo autorice la publicación, revisa los PR de calidad y Docker pendientes e integra los cambios del avance por PR hacia `develop`. Revisa el diff respecto a `develop` actualizado, con especial atención al arranque de Compose, los scripts de `package.json` y los workflows. Enlaza los issues en los PR y actualiza el tablero con su estado real.
+
+Abre un PR de entrega de `develop` hacia `main`. Tras la revisión y los tres workflows en verde, actualiza tu checkout limpio de `main` y crea un tag anotado sobre el commit aprobado. Usa `v0.3.0` si el equipo confirma esa versión y el tag está libre:
+
+```powershell
+git switch main
+git pull --ff-only origin main
+git tag -a v0.3.0 -m "Avance 3"
+git push origin refs/tags/v0.3.0
 ```
 
-Luego se publica el Release en GitHub a partir del tag.
+En GitHub Releases, publica el release a partir del tag y adjunta la URL pública verificada, la guía de ejecución y las evidencias de la entrega.
 
 ## Protección de ramas (Settings → Branches)
 
