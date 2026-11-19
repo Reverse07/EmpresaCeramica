@@ -1,13 +1,26 @@
+# ---------- Argumentos de construcción ----------
+ARG NODE_VERSION=20-alpine
+ARG APP_VERSION=0.2.0
+
 # ---------- Etapa 1: dependencias de producción ----------
-FROM node:20-alpine AS deps
+FROM node:${NODE_VERSION} AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
 # ---------- Etapa 2: imagen final (ligera y sin root) ----------
-FROM node:20-alpine
+FROM node:${NODE_VERSION}
+
+# Metadatos de la imagen
+LABEL org.opencontainers.image.title="EmpresaCeramica" \
+      org.opencontainers.image.description="API REST para gestión de empresa de cerámica" \
+      org.opencontainers.image.version="${APP_VERSION}" \
+      org.opencontainers.image.authors="RibauAlexander <u23242270@utp.edu.pe>" \
+      org.opencontainers.image.source="https://github.com/Reverse07/EmpresaCeramica"
+
 ENV NODE_ENV=production \
     PORT=3000
+
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules

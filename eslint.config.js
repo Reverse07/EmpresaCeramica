@@ -14,8 +14,28 @@ module.exports = [
       globals: { ...globals.node },
     },
     rules: {
+      // Errores comunes
       'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      eqeqeq: 'error',
+      'no-console': 'off',
+      'no-duplicate-imports': 'error',
+
+      // Buenas prácticas
+      eqeqeq: ['error', 'always'],
+      curly: ['error', 'all'],
+      'no-var': 'error',
+      'prefer-const': 'error',
+      'prefer-arrow-callback': 'error',
+
+      // Estilo
+      'object-shorthand': ['error', 'always'],
+      'arrow-body-style': ['error', 'as-needed'],
+    },
+  },
+  {
+    // Reglas más permisivas para los archivos de prueba
+    files: ['test/**/*.js'],
+    rules: {
+      'prefer-arrow-callback': 'off',
     },
   },
 ];
