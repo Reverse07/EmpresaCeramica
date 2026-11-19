@@ -1,0 +1,21 @@
+# Override de desarrollo local — NO subir a producción.
+# Docker Compose lo aplica automáticamente sobre docker-compose.yml.
+name: empresa-ceramica
+
+services:
+  app:
+    # En desarrollo se monta el código fuente para recargar sin reconstruir
+    volumes:
+      - ./src:/app/src:ro
+    environment:
+      NODE_ENV: development
+      LOG_LEVEL: debug
+    # Expone el puerto del depurador de Node
+    ports:
+      - "9229:9229"
+    command: ["node", "--inspect=0.0.0.0:9229", "src/server.js"]
+
+  db:
+    # Expone PostgreSQL al host para usar herramientas como psql o DBeaver
+    ports:
+      - "5432:5432"
